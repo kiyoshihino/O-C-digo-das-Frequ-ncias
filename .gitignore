@@ -1,0 +1,10 @@
+# Arquivos desnecessários para o site
+.DS_Store
+*.pdf
+Bônus /
+assets/
+__pycache__/
+
+# Logs
+*.log
+npm-debug.log*
