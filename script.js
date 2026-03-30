@@ -1,16 +1,17 @@
-/* ══════════════════════════════════════
-   CÓDIGO DAS FREQUÊNCIAS — Script
-   Canvas cosmos + partículas CTA + interações
-   ══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   CÓDIGO DAS FREQUÊNCIAS — Script Premium
+   Canvas cosmos + partículas + interações
+   ══════════════════════════════════════════ */
 
-/* ── Cosmos Canvas (fundo estrelado) ── */
+/* ── Cosmos Canvas (fundo estrelado com aura) ── */
 (function () {
   const canvas = document.getElementById('cosmos-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   let stars = [];
-  const STAR_COUNT = 200;
+  const STAR_COUNT = 250;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -24,12 +25,14 @@
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 1.4 + 0.2,
-        alpha: Math.random() * 0.7 + 0.1,
-        speed: Math.random() * 0.4 + 0.05,
+        r: Math.random() * 2.5 + 0.5,
+        alpha: Math.random() * 0.6 + 0.4,
+        speed: Math.random() * 0.5 + 0.08,
         phase: Math.random() * Math.PI * 2,
-        gold: Math.random() < 0.15,       // 15% são estrelas douradas
-        purple: Math.random() < 0.1,      // 10% são violeta
+        gold: Math.random() < 0.25,
+        purple: Math.random() < 0.2,
+        cyan: Math.random() < 0.15,
+        rose: Math.random() < 0.1,
       });
     }
   }
@@ -37,29 +40,47 @@
   function drawStars(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => {
-      const pulse = Math.sin(t * s.speed + s.phase) * 0.35;
-      const alpha = Math.max(0.05, s.alpha + pulse);
+      const pulse = Math.sin(t * s.speed + s.phase) * 0.3;
+      const alpha = Math.max(0.4, s.alpha + pulse);
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      if (s.gold)        ctx.fillStyle = `rgba(201,168,76,${alpha})`;
-      else if (s.purple) ctx.fillStyle = `rgba(123,94,167,${alpha})`;
-      else               ctx.fillStyle = `rgba(240,237,232,${alpha})`;
+      
+      if (s.gold) {
+        ctx.fillStyle = `rgba(245, 215, 110, ${alpha})`;
+        ctx.shadowColor = 'rgba(245, 215, 110, 0.5)';
+        ctx.shadowBlur = s.r * 2;
+      } else if (s.purple) {
+        ctx.fillStyle = `rgba(167, 119, 211, ${alpha})`;
+        ctx.shadowColor = 'rgba(167, 119, 211, 0.5)';
+        ctx.shadowBlur = s.r * 2;
+      } else if (s.cyan) {
+        ctx.fillStyle = `rgba(0, 212, 255, ${alpha})`;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.5)';
+        ctx.shadowBlur = s.r * 2;
+      } else if (s.rose) {
+        ctx.fillStyle = `rgba(255, 150, 180, ${alpha})`;
+        ctx.shadowColor = 'rgba(255, 150, 180, 0.5)';
+        ctx.shadowBlur = s.r * 2;
+      } else {
+        ctx.fillStyle = `rgba(248, 244, 255, ${alpha})`;
+        ctx.shadowBlur = 0;
+      }
       ctx.fill();
+      ctx.shadowBlur = 0;
     });
   }
 
-  // Linhas de conexão sutis entre estrelas próximas (efeito constelação)
   function drawConstellations() {
-    const DIST = 80;
-    ctx.lineWidth = 0.3;
+    const DIST = 100;
+    ctx.lineWidth = 0.25;
     for (let i = 0; i < stars.length; i++) {
       for (let j = i + 1; j < stars.length; j++) {
         const dx = stars[i].x - stars[j].x;
         const dy = stars[i].y - stars[j].y;
         const d = Math.sqrt(dx * dx + dy * dy);
         if (d < DIST) {
-          const alpha = (1 - d / DIST) * 0.08;
-          ctx.strokeStyle = `rgba(201,168,76,${alpha})`;
+          const alpha = (1 - d / DIST) * 0.06;
+          ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(stars[i].x, stars[i].y);
           ctx.lineTo(stars[j].x, stars[j].y);
@@ -78,7 +99,7 @@
   }
 
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
   raf = requestAnimationFrame(loop);
 })();
 
@@ -88,12 +109,15 @@
   const canvas = document.getElementById('cta-particles');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
   let particles = [];
-  const N = 60;
+  const N = 80;
 
   function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    canvas.width = rect.width;
+    canvas.height = rect.height;
     buildParticles();
   }
 
@@ -103,15 +127,19 @@
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 0.5,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        alpha: Math.random() * 0.6 + 0.1,
-        gold: Math.random() < 0.6,
+        r: Math.random() * 2.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        alpha: Math.random() * 0.5 + 0.2,
+        gold: Math.random() < 0.4,
+        purple: Math.random() < 0.3,
+        cyan: Math.random() < 0.2,
+        rose: Math.random() < 0.1,
       });
     }
   }
 
+  let rafId;
   function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
@@ -121,21 +149,42 @@
       if (p.x > canvas.width) p.x = 0;
       if (p.y < 0) p.y = canvas.height;
       if (p.y > canvas.height) p.y = 0;
+      
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.gold
-        ? `rgba(201,168,76,${p.alpha})`
-        : `rgba(123,94,167,${p.alpha})`;
+      
+      if (p.gold) {
+        ctx.fillStyle = `rgba(245, 215, 110, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(245, 215, 110, 0.6)';
+      } else if (p.purple) {
+        ctx.fillStyle = `rgba(167, 119, 211, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(167, 119, 211, 0.6)';
+      } else if (p.cyan) {
+        ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.6)';
+      } else if (p.rose) {
+        ctx.fillStyle = `rgba(255, 150, 180, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(255, 150, 180, 0.6)';
+      }
+      ctx.shadowBlur = p.r * 3;
       ctx.fill();
+      ctx.shadowBlur = 0;
     });
-    requestAnimationFrame(loop);
+    rafId = requestAnimationFrame(loop);
   }
 
-  // Observar quando a secão entra na viewport
   const section = document.getElementById('inscricao');
-  const ro = new ResizeObserver(resize);
-  ro.observe(section);
-  requestAnimationFrame(loop);
+  if (section) {
+    const ro = new ResizeObserver(resize);
+    ro.observe(section);
+  }
+  
+  setTimeout(() => {
+    resize();
+    if (particles.length > 0) {
+      loop();
+    }
+  }, 100);
 })();
 
 
@@ -143,7 +192,7 @@
 (function () {
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
+    nav.classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
 })();
 
@@ -152,20 +201,18 @@
 (function () {
   const els = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        // Stagger pequeno para cards em grid
         setTimeout(() => {
           entry.target.classList.add('visible');
         }, (entry.target.dataset.delay || 0));
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 
-  // Adiciona delays escalonados para cards
   document.querySelectorAll('.bonus-card, .transform-card').forEach((el, i) => {
-    el.dataset.delay = (i % 3) * 100;
+    el.dataset.delay = (i % 3) * 120;
   });
 
   els.forEach(el => observer.observe(el));
@@ -225,5 +272,21 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
     document.head.appendChild(style);
 
     circle.addEventListener('animationend', () => circle.remove());
+  });
+})();
+
+
+/* ── FAQ Accordion ── */
+(function () {
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    question.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+      faqItems.forEach(i => i.classList.remove('active'));
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    });
   });
 })();
