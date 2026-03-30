@@ -47,12 +47,12 @@ DirectoryIndex index.html
   Header always set Referrer-Policy "no-referrer-when-downgrade"
 </IfModule>
 
-# ── Forçar HTTPS (ativar após SSL instalado na Hostinger) ──
-# <IfModule mod_rewrite.c>
-#   RewriteEngine On
-#   RewriteCond %{HTTPS} off
-#   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-# </IfModule>
+# ── Forçar HTTPS ──
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
 
 # ── Página 404 customizada ──
 ErrorDocument 404 /index.html
