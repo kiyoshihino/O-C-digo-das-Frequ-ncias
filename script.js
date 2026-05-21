@@ -1,9 +1,9 @@
 /* ══════════════════════════════════════════
-   CÓDIGO DAS FREQUÊNCIAS — Script Premium
+   MÉTODO SAD — Script Cósmico Neon
    Canvas cosmos + partículas + interações
    ══════════════════════════════════════════ */
 
-/* ── Cosmos Canvas (fundo estrelado com aura) ── */
+/* ── Cosmos Canvas (fundo estrelado com neons) ── */
 (function () {
   const canvas = document.getElementById('cosmos-canvas');
   if (!canvas) return;
@@ -29,10 +29,10 @@
         alpha: Math.random() * 0.6 + 0.4,
         speed: Math.random() * 0.5 + 0.08,
         phase: Math.random() * Math.PI * 2,
-        gold: Math.random() < 0.25,
-        purple: Math.random() < 0.2,
-        cyan: Math.random() < 0.15,
-        rose: Math.random() < 0.1,
+        cyan: Math.random() < 0.35,
+        lilac: Math.random() < 0.25,
+        pink: Math.random() < 0.15,
+        white: Math.random() < 0.25,
       });
     }
   }
@@ -45,25 +45,22 @@
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       
-      if (s.gold) {
-        ctx.fillStyle = `rgba(245, 215, 110, ${alpha})`;
-        ctx.shadowColor = 'rgba(245, 215, 110, 0.5)';
+      if (s.cyan) {
+        ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`;
+        ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+        ctx.shadowBlur = s.r * 3;
+      } else if (s.lilac) {
+        ctx.fillStyle = `rgba(179, 136, 255, ${alpha})`;
+        ctx.shadowColor = 'rgba(179, 136, 255, 0.8)';
+        ctx.shadowBlur = s.r * 3;
+      } else if (s.pink) {
+        ctx.fillStyle = `rgba(224, 64, 251, ${alpha})`;
+        ctx.shadowColor = 'rgba(224, 64, 251, 0.8)';
+        ctx.shadowBlur = s.r * 3;
+      } else if (s.white) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
         ctx.shadowBlur = s.r * 2;
-      } else if (s.purple) {
-        ctx.fillStyle = `rgba(167, 119, 211, ${alpha})`;
-        ctx.shadowColor = 'rgba(167, 119, 211, 0.5)';
-        ctx.shadowBlur = s.r * 2;
-      } else if (s.cyan) {
-        ctx.fillStyle = `rgba(0, 212, 255, ${alpha})`;
-        ctx.shadowColor = 'rgba(0, 212, 255, 0.5)';
-        ctx.shadowBlur = s.r * 2;
-      } else if (s.rose) {
-        ctx.fillStyle = `rgba(255, 150, 180, ${alpha})`;
-        ctx.shadowColor = 'rgba(255, 150, 180, 0.5)';
-        ctx.shadowBlur = s.r * 2;
-      } else {
-        ctx.fillStyle = `rgba(248, 244, 255, ${alpha})`;
-        ctx.shadowBlur = 0;
       }
       ctx.fill();
       ctx.shadowBlur = 0;
@@ -72,15 +69,15 @@
 
   function drawConstellations() {
     const DIST = 100;
-    ctx.lineWidth = 0.25;
+    ctx.lineWidth = 0.3;
     for (let i = 0; i < stars.length; i++) {
       for (let j = i + 1; j < stars.length; j++) {
         const dx = stars[i].x - stars[j].x;
         const dy = stars[i].y - stars[j].y;
         const d = Math.sqrt(dx * dx + dy * dy);
         if (d < DIST) {
-          const alpha = (1 - d / DIST) * 0.06;
-          ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+          const alpha = (1 - d / DIST) * 0.08;
+          ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(stars[i].x, stars[i].y);
           ctx.lineTo(stars[j].x, stars[j].y);
@@ -131,10 +128,10 @@
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
         alpha: Math.random() * 0.5 + 0.2,
-        gold: Math.random() < 0.4,
-        purple: Math.random() < 0.3,
-        cyan: Math.random() < 0.2,
-        rose: Math.random() < 0.1,
+        cyan: Math.random() < 0.4,
+        lilac: Math.random() < 0.3,
+        pink: Math.random() < 0.2,
+        white: Math.random() < 0.1,
       });
     }
   }
@@ -153,20 +150,20 @@
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       
-      if (p.gold) {
-        ctx.fillStyle = `rgba(245, 215, 110, ${p.alpha})`;
-        ctx.shadowColor = 'rgba(245, 215, 110, 0.6)';
-      } else if (p.purple) {
-        ctx.fillStyle = `rgba(167, 119, 211, ${p.alpha})`;
-        ctx.shadowColor = 'rgba(167, 119, 211, 0.6)';
-      } else if (p.cyan) {
-        ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
-        ctx.shadowColor = 'rgba(0, 212, 255, 0.6)';
-      } else if (p.rose) {
-        ctx.fillStyle = `rgba(255, 150, 180, ${p.alpha})`;
-        ctx.shadowColor = 'rgba(255, 150, 180, 0.6)';
+      if (p.cyan) {
+        ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+      } else if (p.lilac) {
+        ctx.fillStyle = `rgba(179, 136, 255, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(179, 136, 255, 0.8)';
+      } else if (p.pink) {
+        ctx.fillStyle = `rgba(224, 64, 251, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(224, 64, 251, 0.8)';
+      } else if (p.white) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
       }
-      ctx.shadowBlur = p.r * 3;
+      ctx.shadowBlur = p.r * 4;
       ctx.fill();
       ctx.shadowBlur = 0;
     });
@@ -257,7 +254,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       width:${diameter}px;height:${diameter}px;
       left:${e.clientX - btn.getBoundingClientRect().left - radius}px;
       top:${e.clientY - btn.getBoundingClientRect().top - radius}px;
-      background:rgba(255,255,255,0.25);
+      background:rgba(0,255,255,0.4);
       border-radius:50%;
       transform:scale(0);
       animation:ripple 0.6s linear;

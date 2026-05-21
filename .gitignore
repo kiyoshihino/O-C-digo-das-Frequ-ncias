@@ -1,8 +1,8 @@
 # Arquivos desnecessários para o site
 .DS_Store
+.agent/
 *.pdf
 Bônus /
-assets/
 __pycache__/
 
 # Logs
